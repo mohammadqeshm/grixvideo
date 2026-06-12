@@ -1,0 +1,6 @@
+{
+  "name": "Vertex Video Editor",
+  "description": "A professional-grade, dark-themed online video editor with multiple audio, video, and title tracks, dynamic visual properties filters, and asset management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
