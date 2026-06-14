@@ -42,6 +42,10 @@ export interface TimelineClip {
   textColor?: string;
   textPositionX?: number; // percent
   textPositionY?: number; // percent
+  textBgColor?: string; // background color of text block
+  textFontFamily?: string; // font face family e.g. "Inter", "Georgia"
+  textPadding?: number; // padding around the text background in pixels
+  textBorderRadius?: number; // border radius of text background in pixels
 }
 
 export interface TimelineTrack {

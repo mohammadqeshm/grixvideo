@@ -129,7 +129,11 @@ export const INITIAL_CLIPS: TimelineClip[] = [
     textSize: 32,
     textColor: "#ffffff",
     textPositionX: 50,
-    textPositionY: 50
+    textPositionY: 50,
+    textBgColor: "rgba(0, 0, 0, 0.4)",
+    textFontFamily: "Inter",
+    textPadding: 12,
+    textBorderRadius: 6
   },
   {
     id: "clip-music",

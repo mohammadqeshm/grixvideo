@@ -32,6 +32,7 @@ export default function PropertiesPanel({
 }: PropertiesPanelProps) {
   const [activeTab, setActiveTab] = useState<"standard" | "video" | "effects">("standard");
   const [openSections, setOpenSections] = useState({
+    textStyles: true,
     standard: true,
     video: true,
     effects: true,
@@ -131,6 +132,286 @@ export default function PropertiesPanel({
         ) : (
           <div className="text-[10px] text-zinc-500 font-sans italic text-center p-1 bg-[#151517] rounded border border-[#1d1d21]/40">
             No selection. Click a clip to adjust.
+          </div>
+        )}
+
+         {/* Typography & Style Section (Conditional) */}
+        {selectedClip && selectedClip.type === "text" && (
+          <div className="border border-[#1d1d21] rounded-[3px] overflow-hidden bg-[#141416]/40">
+            <button 
+              onClick={() => toggleSection("textStyles")}
+              className="w-full px-3 py-1.5 bg-[#141416] hover:bg-[#1a1a1c] border-b border-[#1d1d21] text-[11px] font-medium text-[#bcbcbf] flex items-center justify-between cursor-pointer"
+            >
+              <span className="flex items-center gap-1.5">
+                {openSections.textStyles ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+                <span className="text-[#a46cfc] font-semibold flex items-center gap-1">
+                  <Type className="w-3 h-3" />
+                  <span>Typography & Style</span>
+                </span>
+              </span>
+            </button>
+            
+            {openSections.textStyles && (
+              <div className="p-3 space-y-3.5 text-zinc-400 text-[10px]">
+                {/* 1. Text Overlay */}
+                <div>
+                  <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest block mb-1">Text Overlay</span>
+                  <textarea 
+                    value={selectedClip.textOverlay || ""}
+                    onChange={(e) => handleChange("textOverlay", e.target.value)}
+                    className="w-full bg-[#0c0c0d] border border-[#1d1d21] rounded px-2.5 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-[#428cdc] font-sans resize-none"
+                    placeholder="Enter subtitle overlay..."
+                    rows={2}
+                  />
+                </div>
+
+                {/* 2. Font Family */}
+                <div>
+                  <div className="flex justify-between items-baseline mb-1">
+                    <span>Font Family</span>
+                  </div>
+                  <select
+                    value={selectedClip.textFontFamily || "Inter"}
+                    onChange={(e) => handleChange("textFontFamily", e.target.value)}
+                    className="w-full bg-[#0c0c0d] border border-[#1d1d21] rounded px-2.5 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-[#428cdc] font-sans cursor-pointer"
+                    style={{ fontFamily: selectedClip.textFontFamily || "Inter" }}
+                  >
+                    <option value="Inter">Inter (Sans)</option>
+                    <option value="Space Grotesk">Space Grotesk (Tech)</option>
+                    <option value="JetBrains Mono">JetBrains Mono (Mono)</option>
+                    <option value="Playfair Display">Playfair Display (Serif)</option>
+                    <option value="Pacifico">Pacifico (Script)</option>
+                    <option value="Georgia">Georgia (Classic Serif)</option>
+                    <option value="Impact">Impact (Heavy Block)</option>
+                    <option value="monospace">System Monospace</option>
+                  </select>
+                </div>
+
+                {/* 3. Text Size */}
+                <div>
+                  <div className="flex justify-between items-baseline mb-1">
+                    <span>Font Size</span>
+                    <span className="text-zinc-200 font-mono text-[9px]">{selectedClip.textSize || 24}px</span>
+                  </div>
+                  <input 
+                    type="range" min="10" max="100" step="1"
+                    value={selectedClip.textSize || 24}
+                    onChange={(e) => handleChange("textSize", parseInt(e.target.value))}
+                    className="w-full h-1 bg-[#1a1a1c] rounded accent-[#428cdc] cursor-pointer"
+                  />
+                  <div className="flex gap-2 mt-1.5 text-[8.5px] justify-between text-zinc-500 select-none">
+                    <button onClick={() => handleChange("textSize", 16)} className="hover:text-zinc-350 transition-colors">Small</button>
+                    <button onClick={() => handleChange("textSize", 32)} className="hover:text-zinc-350 transition-colors">Medium</button>
+                    <button onClick={() => handleChange("textSize", 54)} className="hover:text-zinc-350 transition-colors">Large</button>
+                    <button onClick={() => handleChange("textSize", 80)} className="hover:text-zinc-350 transition-colors">Huge</button>
+                  </div>
+                </div>
+
+                {/* 4. Text Color */}
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <span>Text Color</span>
+                    <div className="flex items-center gap-1.5 bg-[#0c0c0d] border border-[#1d1d21] px-1.5 py-0.5 rounded">
+                      <input 
+                        type="color"
+                        value={selectedClip.textColor?.startsWith("#") ? selectedClip.textColor : "#ffffff"}
+                        onChange={(e) => handleChange("textColor", e.target.value)}
+                        className="w-4 h-4 bg-transparent border-0 cursor-pointer p-0"
+                        title="Custom text color"
+                      />
+                      <span className="text-[8px] font-mono select-all uppercase">{selectedClip.textColor || "#ffffff"}</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-1.5 mt-1.5 flex-wrap">
+                    {[
+                      { name: "White", val: "#ffffff" },
+                      { name: "Sunny Yellow", val: "#facc15" },
+                      { name: "Sunset Orange", val: "#f97316" },
+                      { name: "Peach Red", val: "#f87171" },
+                      { name: "Neon Cyan", val: "#22d3ee" },
+                      { name: "Retro Purple", val: "#c084fc" },
+                      { name: "Active Green", val: "#34d399" },
+                      { name: "Dark Charcoal", val: "#111113" }
+                    ].map(col => (
+                      <button
+                        key={col.val}
+                        onClick={() => handleChange("textColor", col.val)}
+                        className={`w-4 h-4 rounded-full border border-black/50 transition-all ${
+                          selectedClip.textColor === col.val ? "scale-125 ring-2 ring-blue-500/80 border-white" : "hover:scale-110"
+                        }`}
+                        style={{ backgroundColor: col.val }}
+                        title={col.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* 5. Text Background Color */}
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <span>Background Color</span>
+                    <div className="flex items-center gap-1.5 bg-[#0c0c0d] border border-[#1d1d21] px-1.5 py-0.5 rounded">
+                      <select
+                        value={selectedClip.textBgColor && selectedClip.textBgColor.startsWith("rgba") ? selectedClip.textBgColor : (selectedClip.textBgColor === "transparent" ? "transparent" : "custom")}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === "custom") {
+                            handleChange("textBgColor", "#000000");
+                          } else {
+                            handleChange("textBgColor", val);
+                          }
+                        }}
+                        className="bg-transparent border-none text-[9px] text-zinc-300 focus:outline-none cursor-pointer"
+                      >
+                        <option value="transparent">None</option>
+                        <option value="rgba(0, 0, 0, 0.4)">Translucent Dark</option>
+                        <option value="rgba(0, 0, 0, 0.85)">Solid Dark</option>
+                        <option value="rgba(33, 115, 243, 0.4)">Translucent Blue</option>
+                        <option value="rgba(225, 29, 72, 0.4)">Translucent Red</option>
+                        <option value="rgba(255, 255, 255, 0.25)">Translucent Light</option>
+                        <option value="custom">Solid Custom...</option>
+                      </select>
+                      
+                      {selectedClip.textBgColor && selectedClip.textBgColor !== "transparent" && !selectedClip.textBgColor.startsWith("rgba") && (
+                        <input 
+                          type="color"
+                          value={selectedClip.textBgColor}
+                          onChange={(e) => handleChange("textBgColor", e.target.value)}
+                          className="w-3.5 h-3.5 bg-transparent border-0 cursor-pointer p-0"
+                          title="Custom background color"
+                        />
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Background Presets */}
+                  <div className="flex gap-1.5 mt-1.5 flex-wrap">
+                    {[
+                      { name: "None", val: "transparent" },
+                      { name: "Translucent Black", val: "rgba(0, 0, 0, 0.40)" },
+                      { name: "Solid Black", val: "#000000" },
+                      { name: "Vaporwave Blue", val: "rgba(27, 77, 138, 0.6)" },
+                      { name: "Soft Lavender", val: "rgba(147, 51, 234, 0.6)" },
+                      { name: "Cinematic Red", val: "rgba(220, 38, 38, 0.6)" }
+                    ].map(bgCol => (
+                      <button
+                        key={bgCol.val}
+                        onClick={() => handleChange("textBgColor", bgCol.val)}
+                        className={`w-4 h-4 rounded border transition-all flex items-center justify-center ${
+                          selectedClip.textBgColor === bgCol.val ? "scale-125 ring-2 ring-blue-500/85 border-white" : "hover:scale-110"
+                        } ${bgCol.val === 'transparent' ? 'bg-[#0c0c0d] border-dashed border-zinc-700/80' : 'border-black/50'}`}
+                        style={{ backgroundColor: bgCol.val !== 'transparent' ? bgCol.val : undefined }}
+                        title={bgCol.name}
+                      >
+                        {bgCol.val === 'transparent' && <span className="text-[7px] text-zinc-650 block">/</span>}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 6. Text BG Padding and Border Radius (Conditional) */}
+                {selectedClip.textBgColor && selectedClip.textBgColor !== "transparent" && (
+                  <div className="border-t border-[#1d1d21]/60 pt-3.5 mt-1 pb-1 space-y-3">
+                    <div>
+                      <div className="flex justify-between items-baseline mb-1">
+                        <span>Background Padding</span>
+                        <span className="text-zinc-250 font-mono text-[9px]">{selectedClip.textPadding !== undefined ? selectedClip.textPadding : 12}px</span>
+                      </div>
+                      <input 
+                        type="range" min="2" max="32" step="1"
+                        value={selectedClip.textPadding !== undefined ? selectedClip.textPadding : 12}
+                        onChange={(e) => handleChange("textPadding", parseInt(e.target.value))}
+                        className="w-full h-1 bg-[#1a1a1c] rounded accent-[#428cdc] cursor-pointer"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between items-baseline mb-1">
+                        <span>Background Rounding</span>
+                        <span className="text-zinc-250 font-mono text-[9px]">{selectedClip.textBorderRadius !== undefined ? selectedClip.textBorderRadius : 6}px</span>
+                      </div>
+                      <input 
+                        type="range" min="0" max="24" step="1"
+                        value={selectedClip.textBorderRadius !== undefined ? selectedClip.textBorderRadius : 6}
+                        onChange={(e) => handleChange("textBorderRadius", parseInt(e.target.value))}
+                        className="w-full h-1 bg-[#1a1a1c] rounded accent-[#428cdc] cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* 7. Position Coordinates */}
+                <div className="border-t border-[#1d1d21]/60 pt-3.5 mt-1 pb-1 space-y-3">
+                  <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest block">Screen Position</span>
+                  
+                  <div className="grid grid-cols-2 gap-3.5">
+                    <div>
+                      <div className="flex justify-between items-baseline mb-1 text-[9px] text-zinc-500">
+                        <span>Horizontal X</span>
+                        <span className="text-zinc-300 font-mono text-[9px]">{selectedClip.textPositionX !== undefined ? selectedClip.textPositionX : 50}%</span>
+                      </div>
+                      <input 
+                        type="range" min="0" max="100" step="1"
+                        value={selectedClip.textPositionX !== undefined ? selectedClip.textPositionX : 50}
+                        onChange={(e) => handleChange("textPositionX", parseInt(e.target.value))}
+                        className="w-full h-1 bg-[#1a1a1c] rounded accent-[#428cdc] cursor-pointer"
+                      />
+                    </div>
+                    
+                    <div>
+                      <div className="flex justify-between items-baseline mb-1 text-[9px] text-zinc-500">
+                        <span>Vertical Y</span>
+                        <span className="text-zinc-300 font-mono text-[9px]">{selectedClip.textPositionY !== undefined ? selectedClip.textPositionY : 50}%</span>
+                      </div>
+                      <input 
+                        type="range" min="0" max="100" step="1"
+                        value={selectedClip.textPositionY !== undefined ? selectedClip.textPositionY : 50}
+                        onChange={(e) => handleChange("textPositionY", parseInt(e.target.value))}
+                        className="w-full h-1 bg-[#1a1a1c] rounded accent-[#428cdc] cursor-pointer"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 3x3 Position Grid for swift placing */}
+                  <div className="pt-1.5">
+                    <span className="text-[8px] text-zinc-500 uppercase tracking-wider block mb-1.5 text-center">Quick Presets</span>
+                    <div className="grid grid-cols-3 gap-1 max-w-[140px] mx-auto select-none">
+                      {[
+                        { label: "↖", x: 15, y: 15, title: "Top-Left" },
+                        { label: "↑", x: 50, y: 15, title: "Top-Center" },
+                        { label: "↗", x: 85, y: 15, title: "Top-Right" },
+                        { label: "←", x: 15, y: 50, title: "Middle-Left" },
+                        { label: "⊙", x: 50, y: 50, title: "Exact Center" },
+                        { label: "→", x: 85, y: 50, title: "Middle-Right" },
+                        { label: "↙", x: 15, y: 85, title: "Bottom-Left" },
+                        { label: "↓", x: 50, y: 85, title: "Bottom-Center" },
+                        { label: "↘", x: 85, y: 85, title: "Bottom-Right" }
+                      ].map((pos, idx) => {
+                        const isCurrent = (selectedClip.textPositionX === pos.x) && (selectedClip.textPositionY === pos.y);
+                        return (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              handleChange("textPositionX", pos.x);
+                              handleChange("textPositionY", pos.y);
+                            }}
+                            className={`p-1 text-[9px] rounded font-mono font-bold transition-colors ${
+                              isCurrent 
+                                ? "bg-blue-600/30 text-blue-400 border border-blue-500/60" 
+                                : "bg-[#0c0c0d] text-zinc-500 hover:text-zinc-200 hover:bg-[#18181c]"
+                            }`}
+                            title={pos.title}
+                          >
+                            {pos.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -293,19 +574,6 @@ export default function PropertiesPanel({
                       className="w-full h-1 bg-[#1a1a1c] rounded accent-[#428cdc] cursor-pointer"
                     />
                   </div>
-
-                  {/* Text properties edit if it is standard Text */}
-                  {selectedClip.type === "text" && (
-                    <div className="border-t border-[#1d1d21] pt-2 mt-2 space-y-2">
-                       <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest block">Text Control</span>
-                       <input 
-                         type="text"
-                         value={selectedClip.textOverlay || ""}
-                         onChange={(e) => handleChange("textOverlay", e.target.value)}
-                         className="w-full bg-[#0c0c0d] border border-[#1d1d21] rounded px-2 py-1 text-xs text-zinc-200 focus:outline-none focus:border-[#428cdc]"
-                       />
-                    </div>
-                  )}
                 </>
               ) : (
                 <div className="text-zinc-600 text-center py-2">Effects settings are inactive</div>

@@ -370,17 +370,23 @@ export default function VideoPreview({
           {/* Active Overlay Titles */}
           {activeTextClip && (
             <div 
-              className="absolute pointer-events-none select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-center transition-all px-4 font-display font-medium uppercase tracking-widest leading-tight"
+              className="absolute pointer-events-none select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-center transition-all px-4 font-medium leading-tight"
               style={{
-                left: `${activeTextClip.textPositionX || 50}%`,
-                top: `${activeTextClip.textPositionY || 50}%`,
+                left: `${activeTextClip.textPositionX !== undefined ? activeTextClip.textPositionX : 50}%`,
+                top: `${activeTextClip.textPositionY !== undefined ? activeTextClip.textPositionY : 50}%`,
                 transform: "translate(-50%, -50%)",
                 fontSize: `${(activeTextClip.textSize || 24) * 0.9}px`,
                 color: activeTextClip.textColor || "#ffffff",
-                opacity: (activeTextClip.opacity || 100) / 100
+                backgroundColor: activeTextClip.textBgColor || "transparent",
+                fontFamily: activeTextClip.textFontFamily || "inherit",
+                padding: activeTextClip.textBgColor && activeTextClip.textBgColor !== "transparent"
+                  ? `${activeTextClip.textPadding !== undefined ? activeTextClip.textPadding : 12}px`
+                  : undefined,
+                borderRadius: `${activeTextClip.textBorderRadius !== undefined ? activeTextClip.textBorderRadius : 6}px`,
+                opacity: (activeTextClip.opacity !== undefined ? activeTextClip.opacity : 100) / 100
               }}
             >
-              {activeTextClip.textOverlay || "PEAK VALLEYS"}
+              {activeTextClip.textOverlay || "TEXT OVERLAY"}
             </div>
           )}
         </div>
@@ -572,17 +578,23 @@ export default function VideoPreview({
               {/* Active Overlay Titles */}
               {activeTextClip && (
                 <div 
-                  className="absolute pointer-events-none select-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)] text-center transition-all px-4 font-display font-medium uppercase tracking-widest leading-tight"
+                  className="absolute pointer-events-none select-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)] text-center transition-all px-4 font-medium leading-tight"
                   style={{
-                    left: `${activeTextClip.textPositionX || 50}%`,
-                    top: `${activeTextClip.textPositionY || 50}%`,
+                    left: `${activeTextClip.textPositionX !== undefined ? activeTextClip.textPositionX : 50}%`,
+                    top: `${activeTextClip.textPositionY !== undefined ? activeTextClip.textPositionY : 50}%`,
                     transform: "translate(-50%, -50%)",
                     fontSize: `${(activeTextClip.textSize || 24) * 1.5}px`, // Scaled up nicely
                     color: activeTextClip.textColor || "#ffffff",
-                    opacity: (activeTextClip.opacity || 100) / 100
+                    backgroundColor: activeTextClip.textBgColor || "transparent",
+                    fontFamily: activeTextClip.textFontFamily || "inherit",
+                    padding: activeTextClip.textBgColor && activeTextClip.textBgColor !== "transparent"
+                      ? `${(activeTextClip.textPadding !== undefined ? activeTextClip.textPadding : 12) * 1.5}px`
+                      : undefined,
+                    borderRadius: `${(activeTextClip.textBorderRadius !== undefined ? activeTextClip.textBorderRadius : 6) * 1.5}px`,
+                    opacity: (activeTextClip.opacity !== undefined ? activeTextClip.opacity : 100) / 100
                   }}
                 >
-                  {activeTextClip.textOverlay || "PEAK VALLEYS"}
+                  {activeTextClip.textOverlay || "TEXT OVERLAY"}
                 </div>
               )}
             </div>

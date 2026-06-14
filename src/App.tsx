@@ -492,11 +492,15 @@ export default function App() {
       brightness: 110,
       hueRotate: 0,
       saturate: 100,
-      textOverlay: "PEAK VALLEYS",
+      textOverlay: "TEXT OVERLAY",
       textSize: 28,
       textColor: "#ffffff",
       textPositionX: 50,
-      textPositionY: 50
+      textPositionY: 50,
+      textBgColor: "rgba(0, 0, 0, 0.4)",
+      textFontFamily: "Inter",
+      textPadding: 12,
+      textBorderRadius: 6
     };
 
     forcePushToHistory();
